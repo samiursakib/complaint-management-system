@@ -2,7 +2,6 @@
   "name": "complaint-management-system-server",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
@@ -13,5 +12,9 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "mysql2": "^3.12.0"
   }
 }
