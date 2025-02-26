@@ -5,3 +5,12 @@ export interface User {
   password: string;
   role: string;
 }
+
+export interface Ticket {
+  id?: number;
+  subject: string;
+  description: string;
+  status?: string;
+  customer: number;
+  executive: number;
+}

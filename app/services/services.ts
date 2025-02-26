@@ -1,3 +1,5 @@
+import { Ticket } from "~/types";
+
 const backendUrl = "http://localhost:8080";
 
 export const login = async (email: string, password: string, role: string) => {
@@ -14,6 +16,53 @@ export const login = async (email: string, password: string, role: string) => {
     }
     const data = await response.json();
     return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const findAllTickets = async () => {
+  try {
+    const response = await fetch(`${backendUrl}/tickets`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch tickets");
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const findAllUsers = async () => {
+  try {
+    const response = await fetch(`${backendUrl}/users`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const postTicket = async (formData: Ticket) => {
+  try {
+    console.log(formData);
+    const response = await fetch(`${backendUrl}/tickets`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("Ticket creation failed");
+    }
+    const result = await response.json();
+    return result;
   } catch (err) {
     console.error(err);
   }
