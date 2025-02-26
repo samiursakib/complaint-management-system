@@ -1,13 +1,56 @@
-import { Button, Card, Divider, Text, TextField } from "@shopify/polaris";
-import { useState } from "react";
+import {
+  Button,
+  Card,
+  Divider,
+  Select,
+  Text,
+  TextField,
+} from "@shopify/polaris";
+import { useEffect, useState } from "react";
 import type { Route } from "./+types";
-import { authenticator } from "../services/authenticator";
-import { data, Form, redirect } from "@remix-run/react";
+import {
+  data,
+  Form,
+  json,
+  redirect,
+  useActionData,
+  useNavigate,
+} from "@remix-run/react";
 import { getSession, sessionStorage } from "../services/session.server";
+import { authenticator } from "~/services/authenticator";
+import toast from "react-hot-toast";
+
+type ActionData = {
+  success: boolean;
+  message: string;
+  sessionCookie?: string;
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("customer");
+
+  const actionData = useActionData<ActionData>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!actionData) return;
+    if (actionData.success) {
+      toast.success("Login successful", {
+        duration: 1000,
+        position: "bottom-right",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } else {
+      setEmail("");
+      setPassword("");
+      setRole("customer");
+      toast.error(actionData.message);
+    }
+  }, [actionData, navigate]);
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -17,13 +60,23 @@ export default function Login() {
         </Text>
         <Divider />
         <Form method="post">
+          <Select
+            label="Role"
+            name="role"
+            value={role}
+            onChange={setRole}
+            options={[
+              { label: "Admin", value: "admin" },
+              { label: "Customer", value: "customer" },
+            ]}
+          />
           <TextField
             label="Email"
             name="email"
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(email: string) => setEmail(email)}
+            onChange={setEmail}
           />
           <TextField
             label="Password"
@@ -31,7 +84,7 @@ export default function Login() {
             type="password"
             autoComplete="password"
             value={password}
-            onChange={(email: string) => setPassword(email)}
+            onChange={setPassword}
           />
           <Button submit>Login</Button>
         </Form>
@@ -43,12 +96,19 @@ export default function Login() {
 export async function action({ request }: Route["ActionArgs"]) {
   const user = await authenticator.authenticate("user-pass", request);
   const session = await getSession(request);
+  if (!user) {
+    return json({ success: false, message: "Invalid credentials" });
+  }
   session.set("user", user);
-  throw redirect("/", {
-    headers: {
-      "Set-Cookie": await sessionStorage.commitSession(session),
-    },
-  });
+  const sessionCookie = await sessionStorage.commitSession(session);
+  return json(
+    { success: true, message: "Login successful" },
+    {
+      headers: {
+        "Set-Cookie": sessionCookie,
+      },
+    }
+  );
 }
 
 export async function loader({ request }: Route["LoaderArgs"]) {
