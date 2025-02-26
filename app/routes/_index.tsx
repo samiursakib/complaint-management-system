@@ -2,18 +2,27 @@ import { json, type MetaFunction } from "@remix-run/node";
 import { Button } from "@shopify/polaris";
 import { Route } from "./+types";
 import { getSession } from "~/services/session.server";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Complaint Management System" },
+    { name: "CMS", content: "Welcome to EFoli!" },
   ];
 };
 
 export default function Index() {
   const user = useLoaderData();
-  console.log(user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="flex h-screen items-center justify-center">
       <Button>Complaint Management System</Button>
