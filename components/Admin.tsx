@@ -12,12 +12,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const Admin = ({ tickets }: { tickets: Ticket[] }) => {
-  const [updatedTickets, setUpdatedTickets] = useState<Ticket[]>([]);
+  const [updatedTickets, setUpdatedTickets] = useState<Ticket[]>(tickets);
 
   const handleMarkTicket = async (ticketId: number, status: string) => {
-    console.log(ticketId, status);
     const result = await markTicket(ticketId, status);
-    console.log(result);
     if (result.success) {
       toast.success(result.message);
       const newTickets = await findAllTickets();
@@ -27,26 +25,21 @@ const Admin = ({ tickets }: { tickets: Ticket[] }) => {
     }
   };
 
-  console.log(updatedTickets);
-
-  const emptyStateMarkup =
-    // !appliedFilters.length &&
-    !updatedTickets.length ? (
-      <EmptyState
-        heading="View all complaints made by customers"
-        action={undefined}
-        image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
-      >
-        <p>
-          All customers&apos; complaints about their experience will appear
-          here.
-        </p>
-      </EmptyState>
-    ) : undefined;
+  const emptyStateMarkup = !updatedTickets.length ? (
+    <EmptyState
+      heading="View all complaints made by customers"
+      action={undefined}
+      image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+    >
+      <p>
+        All customers&apos; complaints about their experience will appear here.
+      </p>
+    </EmptyState>
+  ) : undefined;
 
   return (
     <div>
-      <Page>
+      <Page title="Customers' Complaints">
         <TicketList
           list={updatedTickets}
           hideEditButton
@@ -63,7 +56,6 @@ const Admin = ({ tickets }: { tickets: Ticket[] }) => {
                 emptyState={emptyStateMarkup}
                 items={updatedTickets}
                 renderItem={() => null}
-                // filterControl={filterControl}
                 resourceName={{ singular: "ticket", plural: "tickets" }}
               />
             </LegacyCard>

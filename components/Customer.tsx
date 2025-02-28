@@ -10,6 +10,7 @@ import {
   TextField,
   Select,
   Button,
+  Text,
 } from "@shopify/polaris";
 import { FormEvent, useState } from "react";
 import { LoaderData } from "../app/routes/_index";
@@ -31,7 +32,7 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
     description: "",
     executive: possibleExecutives[0].id,
   });
-  const [updatedTickets, setUpdatedTickets] = useState(tickets);
+  const [updatedTickets, setUpdatedTickets] = useState<Ticket[]>(tickets);
   const [createTicketModalActive, setCreateTicketModalActive] = useState(false);
   const [isInEditMode, setIsInEditMode] = useState(false);
 
@@ -49,7 +50,6 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
       isInEditMode,
     };
     const result = await upsertTicket(refinedFormData);
-    console.log(result);
     if (result.success) {
       toast.success(result.message);
       if (isInEditMode) {
@@ -63,22 +63,20 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
     }
   };
 
-  const emptyStateMarkup =
-    // !appliedFilters.length &&
-    !updatedTickets.length ? (
-      <EmptyState
-        heading="Place complaints to get started"
-        action={{
-          content: "Create ticket",
-          onAction: () => {
-            setCreateTicketModalActive(true);
-          },
-        }}
-        image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
-      >
-        <p>You can place complaints about your experience with us.</p>
-      </EmptyState>
-    ) : undefined;
+  const emptyStateMarkup = !updatedTickets.length ? (
+    <EmptyState
+      heading="Place complaints to get started"
+      action={{
+        content: "Create ticket",
+        onAction: () => {
+          setCreateTicketModalActive(true);
+        },
+      }}
+      image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+    >
+      <p>You can place complaints about your experience with us.</p>
+    </EmptyState>
+  ) : undefined;
 
   const handleEditTicket = (ticket: Ticket) => {
     setCreateTicketModalActive(true);
@@ -110,8 +108,11 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
       <Page>
         <div
           className="flex flex-row items-center"
-          style={{ justifyContent: "flex-end", marginBottom: "1rem" }}
+          style={{ justifyContent: "space-between", margin: "1rem 0" }}
         >
+          <Text as="h1" variant="headingLg">
+            Your Complaints
+          </Text>
           <Button
             onClick={() => setCreateTicketModalActive(true)}
             icon={PlusIcon}

@@ -3,7 +3,22 @@ const DB = require("../database/DB");
 class TicketModel {
   findAll = async () => {
     try {
-      const query = `SELECT * FROM tickets ORDER BY created_at DESC`;
+      const query = `
+        SELECT
+          t.id,
+          t.subject,
+          t.description,
+          t.status,
+          t.customer,
+          t.executive,
+          t.feedback,
+          CONVERT_TZ(t.created_at, 'UTC', '+06:00') AS created_at,
+          u.full_name
+        FROM tickets t
+        JOIN users u
+        ON t.customer = u.id
+        ORDER BY created_at DESC
+      `;
       const result = await DB.query(query);
       return result;
     } catch (err) {
@@ -14,7 +29,20 @@ class TicketModel {
 
   findAllByCustomer = async (id) => {
     try {
-      const query = `SELECT * FROM tickets WHERE customer = ? ORDER BY created_at DESC`;
+      const query = `
+        SELECT
+          t.id,
+          t.subject,
+          t.description,
+          t.status,
+          t.customer,
+          t.executive,
+          t.feedback,
+          CONVERT_TZ(t.created_at, 'UTC', '+06:00') AS created_at
+        FROM tickets t
+        WHERE customer = ?
+        ORDER BY created_at DESC
+      `;
       const result = await DB.query(query, [id]);
       return result;
     } catch (err) {

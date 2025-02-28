@@ -1,4 +1,5 @@
 import {
+  BlockStack,
   Button,
   Card,
   Divider,
@@ -38,12 +39,11 @@ export default function Login() {
     if (!actionData) return;
     if (actionData.success) {
       toast.success("Login successful", {
-        duration: 1000,
-        position: "bottom-right",
+        duration: 2000,
       });
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 2000);
     } else {
       setEmail("");
       setPassword("");
@@ -54,41 +54,48 @@ export default function Login() {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <Card>
-        <Text variant="headingLg" as="h1">
-          Login
-        </Text>
-        <Divider />
-        <Form method="post">
-          <Select
-            label="Role"
-            name="role"
-            value={role}
-            onChange={setRole}
-            options={[
-              { label: "Admin", value: "admin" },
-              { label: "Customer", value: "customer" },
-            ]}
-          />
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={setEmail}
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="password"
-            value={password}
-            onChange={setPassword}
-          />
-          <Button submit>Login</Button>
-        </Form>
-      </Card>
+      <div className="w-[300px]">
+        <Card>
+          <div className="mb-4">
+            <Text variant="headingLg" as="h1" alignment="center">
+              Login
+            </Text>
+          </div>
+          <Divider />
+          <div className="mb-4"></div>
+          <Form method="post">
+            <BlockStack gap="300">
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={setEmail}
+              />
+              <TextField
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="password"
+                value={password}
+                onChange={setPassword}
+              />
+              <Select
+                label="Role"
+                name="role"
+                value={role}
+                onChange={setRole}
+                options={[
+                  { label: "Admin", value: "admin" },
+                  { label: "Customer", value: "customer" },
+                ]}
+              />
+              <Button submit>Login</Button>
+            </BlockStack>
+          </Form>
+        </Card>
+      </div>
     </div>
   );
 }
