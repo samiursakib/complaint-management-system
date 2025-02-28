@@ -6,7 +6,11 @@ import { useEffect } from "react";
 import { Ticket, User } from "~/types";
 import Admin from "components/Admin";
 import Customer from "components/Customer";
-import { findAllTickets, findAllUsers } from "~/services/services";
+import {
+  findAllTickets,
+  findAllTicketsOfUser,
+  findAllUsers,
+} from "~/services/services";
 
 export type LoaderData = {
   user: User;
@@ -25,19 +29,21 @@ export default function Index() {
   const loaderData = useLoaderData<LoaderData>();
   const user = loaderData.user;
   const navigate = useNavigate();
-  const isAdmin = user.role === "admin";
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      return navigate("/login");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user, navigate]);
+
+  if (!user) return null;
+
+  const isAdmin = user.role === "admin";
 
   return (
     <div>
       {isAdmin ? (
-        <Admin user={user} />
+        <Admin user={user} tickets={loaderData.tickets} />
       ) : (
         <Customer
           user={user}
@@ -52,7 +58,10 @@ export default function Index() {
 export async function loader({ request }: Route["LoaderArgs"]) {
   const session = await getSession(request);
   const user = session.get("user");
-  const tickets = await findAllTickets();
+  const tickets =
+    (user?.role === "admin"
+      ? await findAllTickets()
+      : await findAllTicketsOfUser(user?.id)) ?? [];
   const users = await findAllUsers();
   return json({ user, tickets, users });
 }

@@ -34,6 +34,21 @@ export const findAllTickets = async () => {
   }
 };
 
+export const findAllTicketsOfUser = async (userId: number) => {
+  try {
+    const response = await fetch(
+      `${backendUrl}/tickets/tickets-by-customer?customerId=${userId}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch tickets");
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const findAllUsers = async () => {
   try {
     const response = await fetch(`${backendUrl}/users`);
@@ -47,19 +62,40 @@ export const findAllUsers = async () => {
   }
 };
 
-export const postTicket = async (formData: Ticket) => {
+export const upsertTicket = async (
+  formData: Ticket & { isInEditMode: boolean }
+) => {
   try {
-    console.log(formData);
-    const response = await fetch(`${backendUrl}/tickets`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+    const response = await fetch(
+      `${backendUrl}/tickets${formData.isInEditMode ? `/${formData.id}` : ""}`,
+      {
+        method: formData.isInEditMode ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Ticket ${formData.isInEditMode ? "update" : "creation"} failed`
+      );
+    }
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const deleteTicket = async (ticketId: number) => {
+  try {
+    const response = await fetch(`${backendUrl}/tickets/${ticketId}`, {
+      method: "DELETE",
     });
     console.log(response);
     if (!response.ok) {
-      throw new Error("Ticket creation failed");
+      throw new Error("Ticket deletion failed");
     }
     const result = await response.json();
     return result;

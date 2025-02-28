@@ -7,10 +7,10 @@ export interface User {
 }
 
 export interface Ticket {
-  id?: number;
+  id?: number | null;
   subject: string;
   description: string;
   status?: string;
-  customer: number;
+  customer?: number;
   executive: number;
 }

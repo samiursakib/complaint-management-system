@@ -13,7 +13,7 @@ class AuthModel {
       }
       return null;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   };
