@@ -1,7 +1,7 @@
-import { json, type MetaFunction } from "@remix-run/node";
+import { json, redirect, type MetaFunction } from "@remix-run/node";
 import { Route } from "./+types";
-import { getSession } from "~/services/session.server";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { getSession, sessionStorage } from "~/services/session.server";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 import { Ticket, User } from "~/types";
 import Admin from "components/Admin";
@@ -11,6 +11,9 @@ import {
   findAllTicketsOfUser,
   findAllUsers,
 } from "~/services/services";
+import { Toaster } from "react-hot-toast";
+import { Button, Card, Page } from "@shopify/polaris";
+import { ExitIcon, ProfileIcon } from "@shopify/polaris-icons";
 
 export type LoaderData = {
   user: User;
@@ -36,12 +39,45 @@ export default function Index() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    document.body.style.background = "white";
+  }, []);
+
   if (!user) return null;
 
   const isAdmin = user.role === "admin";
 
+  console.log(user);
+
   return (
-    <div>
+    <>
+      <Toaster />
+      <Page>
+        <Card>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <Button variant="plain" icon={ProfileIcon} />
+              <span className="text-lg font-semibold">{user.full_name}</span>
+              {isAdmin ? (
+                <span className="text-sm font-light">Admin</span>
+              ) : null}
+            </div>
+            <Form method="post">
+              <Button submit icon={ExitIcon}>
+                Signout
+              </Button>
+            </Form>
+          </div>
+        </Card>
+      </Page>
       {isAdmin ? (
         <Admin tickets={loaderData.tickets} />
       ) : (
@@ -51,8 +87,17 @@ export default function Index() {
           tickets={loaderData.tickets}
         />
       )}
-    </div>
+    </>
   );
+}
+
+export async function action({ request }: Route["ActionArgs"]) {
+  const session = await getSession(request);
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await sessionStorage.destroySession(session),
+    },
+  });
 }
 
 export async function loader({ request }: Route["LoaderArgs"]) {

@@ -9,6 +9,7 @@ import {
   Card,
   InlineStack,
   Popover,
+  Text,
   TextField,
 } from "@shopify/polaris";
 import { Ticket } from "../app/types";
@@ -21,6 +22,7 @@ import {
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { findAllTickets, replyTicket } from "../app/services/services";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 const TicketItem = ({
   t,
@@ -61,9 +63,7 @@ const TicketItem = ({
       ticketId,
       feedback,
     };
-    console.log(payload);
     const result = await replyTicket(payload);
-    console.log(result);
     if (result.success) {
       toast.success(result.message);
       setIsReplying(false);
@@ -75,7 +75,6 @@ const TicketItem = ({
     }
   };
 
-  console.log(isReplying);
   return (
     <Card key={t.id}>
       <div className="flex flex-row" style={{ gap: "1rem" }}>
@@ -86,6 +85,17 @@ const TicketItem = ({
           />
         </div>
         <Box width="100%">
+          <InlineStack>
+            <Text as="h3" fontWeight="semibold">
+              {t.full_name ?? "You"}
+            </Text>
+            <>
+              <span style={{ margin: "0 0.5rem" }}>-</span>
+              <Text as="span" tone="subdued">
+                {moment(t.created_at).fromNow()}
+              </Text>
+            </>
+          </InlineStack>
           <div style={{ display: "flex", gap: "0.8rem" }}>
             <span>{t.subject}</span>
             <Badge

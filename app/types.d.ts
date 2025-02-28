@@ -14,4 +14,6 @@ export interface Ticket {
   customer?: number;
   executive: number;
   feedback?: string;
+  created_at?: Date;
+  full_name?: string;
 }
