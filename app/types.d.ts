@@ -13,4 +13,5 @@ export interface Ticket {
   status?: string;
   customer?: number;
   executive: number;
+  feedback?: string;
 }

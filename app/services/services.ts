@@ -103,3 +103,45 @@ export const deleteTicket = async (ticketId: number) => {
     console.error(err);
   }
 };
+
+export const markTicket = async (ticketId: number, status: string) => {
+  try {
+    console.log(ticketId, status);
+    const response = await fetch(`${backendUrl}/tickets/${ticketId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    });
+    if (!response.ok) {
+      throw new Error("Ticket status update failed");
+    }
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const replyTicket = async (payload: {
+  ticketId: number;
+  feedback: string;
+}) => {
+  try {
+    const response = await fetch(`${backendUrl}/tickets/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error("Ticket reply failed");
+    }
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};

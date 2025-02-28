@@ -123,6 +123,7 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
         <TicketList
           list={updatedTickets}
           hideReplyButton
+          hideMarkButton
           handleEditTicket={handleEditTicket}
           handleDeleteTicket={handleDeleteTicket}
         />

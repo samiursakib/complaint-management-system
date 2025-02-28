@@ -90,6 +90,45 @@ class TicketModel {
       throw err;
     }
   };
+
+  statusUpdate = async (req) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      console.log(id, status);
+
+      const ticketStatusUpdateQuery = `UPDATE tickets SET status = ? WHERE id = ?`;
+      const ticketStatusUpdateResult = await DB.query(ticketStatusUpdateQuery, [
+        status,
+        id,
+      ]);
+      if (ticketStatusUpdateResult.affectedRows === 0) {
+        return { success: false, message: "Ticket status update failed" };
+      }
+      return { success: true, message: "Ticket status updated successfully" };
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  postFeedback = async (req) => {
+    try {
+      const { ticketId, feedback } = req.body;
+      const ticketFeedbackUpdateQuery = `UPDATE tickets SET feedback = ? WHERE id = ?`;
+      const ticketFeedbackUpdateResult = await DB.query(
+        ticketFeedbackUpdateQuery,
+        [feedback, ticketId]
+      );
+      if (ticketFeedbackUpdateResult.affectedRows === 0) {
+        return { success: false, message: "Feedback sending failed" };
+      }
+      return { success: true, message: "Feedback sent successfully" };
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 }
 
 module.exports = new TicketModel();

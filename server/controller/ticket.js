@@ -45,6 +45,24 @@ class TicketController {
       res.status(500).json({ message: err.message });
     }
   };
+
+  statusUpdate = async (req, res) => {
+    try {
+      const data = await TicketModel.statusUpdate(req);
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
+  postFeedback = async (req, res) => {
+    try {
+      const data = await TicketModel.postFeedback(req);
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
 }
 
 module.exports = new TicketController();

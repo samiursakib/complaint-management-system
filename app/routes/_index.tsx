@@ -43,7 +43,7 @@ export default function Index() {
   return (
     <div>
       {isAdmin ? (
-        <Admin user={user} tickets={loaderData.tickets} />
+        <Admin tickets={loaderData.tickets} />
       ) : (
         <Customer
           user={user}
