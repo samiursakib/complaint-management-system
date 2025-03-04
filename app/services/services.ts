@@ -93,7 +93,6 @@ export const deleteTicket = async (ticketId: number) => {
     const response = await fetch(`${backendUrl}/tickets/${ticketId}`, {
       method: "DELETE",
     });
-    console.log(response);
     if (!response.ok) {
       throw new Error("Ticket deletion failed");
     }
@@ -106,7 +105,6 @@ export const deleteTicket = async (ticketId: number) => {
 
 export const markTicket = async (ticketId: number, status: string) => {
   try {
-    console.log(ticketId, status);
     const response = await fetch(`${backendUrl}/tickets/${ticketId}`, {
       method: "PATCH",
       headers: {

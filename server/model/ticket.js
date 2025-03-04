@@ -123,8 +123,6 @@ class TicketModel {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      console.log(id, status);
-
       const ticketStatusUpdateQuery = `UPDATE tickets SET status = ? WHERE id = ?`;
       const ticketStatusUpdateResult = await DB.query(ticketStatusUpdateQuery, [
         status,

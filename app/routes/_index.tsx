@@ -47,8 +47,6 @@ export default function Index() {
 
   const isAdmin = user.role === "admin";
 
-  console.log(user);
-
   return (
     <>
       <Toaster />
