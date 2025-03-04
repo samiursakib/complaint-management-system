@@ -10,7 +10,6 @@ import {
   TextField,
   Select,
   Button,
-  Text,
 } from "@shopify/polaris";
 import { FormEvent, useState } from "react";
 import { LoaderData } from "../app/routes/_index";
@@ -58,6 +57,12 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
       setCreateTicketModalActive(false);
       const newTickets = await findAllTicketsOfUser(user.id);
       setUpdatedTickets(newTickets);
+      setFormData({
+        id: null,
+        subject: "",
+        description: "",
+        executive: possibleExecutives[0].id,
+      });
     } else {
       toast.error(result.message);
     }
@@ -105,22 +110,17 @@ const Customer = ({ user, tickets, users }: LoaderData) => {
 
   return (
     <div>
-      <Page>
-        <div
-          className="flex flex-row items-center"
-          style={{ justifyContent: "space-between", margin: "1rem 0" }}
-        >
-          <Text as="h1" variant="headingLg">
-            Your Complaints
-          </Text>
+      <Page
+        title="Your Complaints"
+        primaryAction={
           <Button
             onClick={() => setCreateTicketModalActive(true)}
             icon={PlusIcon}
           >
             Create
           </Button>
-        </div>
-
+        }
+      >
         <TicketList
           list={updatedTickets}
           hideReplyButton

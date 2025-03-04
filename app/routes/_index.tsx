@@ -12,7 +12,7 @@ import {
   findAllUsers,
 } from "~/services/services";
 import { Toaster } from "react-hot-toast";
-import { Button, Card, Page } from "@shopify/polaris";
+import { Badge, Button, Card, Page } from "@shopify/polaris";
 import { ExitIcon, ProfileIcon } from "@shopify/polaris-icons";
 
 export type LoaderData = {
@@ -66,12 +66,10 @@ export default function Index() {
             >
               <Button variant="plain" icon={ProfileIcon} />
               <span className="text-lg font-semibold">{user.full_name}</span>
-              {isAdmin ? (
-                <span className="text-sm font-light">Admin</span>
-              ) : null}
+              {isAdmin ? <Badge>Admin</Badge> : null}
             </div>
             <Form method="post">
-              <Button submit icon={ExitIcon}>
+              <Button submit tone="critical" icon={ExitIcon}>
                 Signout
               </Button>
             </Form>

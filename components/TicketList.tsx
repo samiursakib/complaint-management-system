@@ -56,7 +56,7 @@ const TicketItem = ({
 
   const handleReply = async (ticketId: number) => {
     if (feedback === "") {
-      setIsReplying(false);
+      toast.error("Please enter a reply");
       return;
     }
     const payload = {
@@ -147,12 +147,14 @@ const TicketItem = ({
               </div>
               <Button icon={CheckIcon} onClick={() => handleReply?.(t.id!)} />
               <Button
-                icon={DeleteIcon}
+                tone="critical"
                 onClick={() => {
                   setIsReplying(false);
                   setFeedback("");
                 }}
-              />
+              >
+                Cancel
+              </Button>
             </div>
           ) : null}
           <InlineStack align="end">
@@ -166,6 +168,7 @@ const TicketItem = ({
               {!hideDeleteButton ? (
                 <Button
                   icon={DeleteIcon}
+                  tone="critical"
                   onClick={() => handleDeleteTicket?.(t.id!)}
                 />
               ) : null}
