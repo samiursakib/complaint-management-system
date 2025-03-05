@@ -1,40 +1,21 @@
-# Welcome to Remix!
+# Welcome everyone
 
-- 📖 [Remix docs](https://remix.run/docs)
-
-## Development
-
-Run the dev server:
-
-```shellscript
-npm run dev
-```
-
-## Deployment
-
-First, build your app for production:
-
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+To run this project locally:
+* `git clone https://github.com/samiursakib/complaint-management-system.git`
+* `cd complaint-management-system`
+For client: 
+* `npm i`
+* `npm run dev`
+* open another terminal in your editor
+For server:
+* `cd server`
+* `npm i`
+* create a file inside `/server` named `.env`
+* paste the following environment variables
+  PORT=8080  
+  HOST=mysql-3cb065f8-rafisamiur-90a2.i.aivencloud.com  
+  USER=avnadmin  
+  PASSWORD=AVNS_SXufvHXUnrLyJONBz0-  
+  DATABASE_PORT=18259  
+  DATABASE=defaultdb  
+* `npm run dev`
