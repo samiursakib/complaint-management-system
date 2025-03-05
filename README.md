@@ -21,14 +21,14 @@ For server:
 * `npm run dev`
 
 ## User credentials
-email: rafisamiur@gmail.com
-password: sakib
-role: admin
+email: rafisamiur@gmail.com  
+password: sakib  
+role: admin  
 
-email: samiurrafi2@gmail.com
-password: samiur
-role: customer
+email: samiurrafi2@gmail.com  
+password: samiur  
+role: customer  
 
-email: ariful@gmail.com
-password: ariful
-role: customer
+email: ariful@gmail.com  
+password: ariful  
+role: customer  
